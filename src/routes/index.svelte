@@ -191,17 +191,17 @@ async function saveEntry() {
   );
   if (error) alert(error.message);
 }
-// Get entries
-// async function getEntries() {
-//   const { data, error } = await supabase.from("studentEntries").select();
-//   if (error) alert(error.message);
+//Get entries
+async function getEntries() {
+  const { data, error } = await supabase.from("studentEntries").select();
+  if (error) alert(error.message);
 
-//   if (data != "") {
-//     timetable = data[0].timetable;
-//   }
-// }
+  if (data != "") {
+    timetable = data[0].timetable;
+  }
+}
 
-// getEntries();
+getEntries();
 function addTimeSlot(day){
     if(day == "Monday"){
         timetable.Monday = [
@@ -274,8 +274,9 @@ else if (day === "Friday"){
 	 timetable = timetable;
 
 	}
+	saveEntry();
 }
-saveEntry();
+
 function setTimeSlot(day,index,newName,newPeriod,newStyle){
 	if (day === "Monday") {
   	timetable.Monday[index].name = newName;
@@ -302,9 +303,9 @@ function setTimeSlot(day,index,newName,newPeriod,newStyle){
 		timetable.Friday[index].period = newPeriod;
 		timetable.Friday[index].style = newStyle;
 	}
-	
+	saveEntry();
 }
-saveEntry();
+
 
 
 
@@ -346,7 +347,8 @@ saveEntry();
       <th scope="row">TUE</th>
       {#each timetable.Tuesday as timeSlot, index}
       <td colspan={timeSlot.period} class={timeSlot.style}>
-      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target = "#editTimeSlot">{timeSlot.name}</button>
+      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target = "#editTimeSlot"
+	  on:click = {() => showCurData("Tuesday",index,timeSlot.name, timeSlot.period, timeSlot.style)}>{timeSlot.name}</button>
      
     </td>
  {/each}
@@ -359,7 +361,8 @@ saveEntry();
       <th scope="row">WED</th>
       {#each timetable.Wednesday as timeSlot, index}
       <td colspan={timeSlot.period} class={timeSlot.style}>
-      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot">{timeSlot.name}</button>
+      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot"
+	  on:click = {() => showCurData("Wednesday",index,timeSlot.name, timeSlot.period, timeSlot.style)}>{timeSlot.name}</button>
 
     </td>
  {/each}
@@ -371,7 +374,8 @@ saveEntry();
       <th scope="row">THU</th>
       {#each timetable.Thursday as timeSlot, index}
       <td colspan={timeSlot.period} class={timeSlot.style}>
-      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot">{timeSlot.name}</button>
+      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot"
+	  on:click = {() => showCurData("Thursday",index,timeSlot.name, timeSlot.period, timeSlot.style)}>{timeSlot.name}</button>
 
     </td>
  {/each}
@@ -383,7 +387,8 @@ saveEntry();
       <th scope="row">FRI</th>
       {#each timetable.Friday as timeSlot, index}
       <td colspan={timeSlot.period} class={timeSlot.style}>
-      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot">{timeSlot.name}</button>
+      <button class="btn" type="button"data-bs-toggle="modal" data-bs-target= "#editTimeSlot"
+	  on:click = {() => showCurData("Friday",index,timeSlot.name, timeSlot.period, timeSlot.style)}>{timeSlot.name}</button>
 
     </td>
  {/each} <td>
@@ -432,8 +437,8 @@ saveEntry();
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-danger"data-bs-dismiss="modal" on:click={() => deleteTimeSlot(curDay, curIndex)}>Delete</button>
-          <button type="button" class="btn btn-primary"on:click={() => setTimeSlot(curDay, curIndex, curName, curPeriod, curStyle)}>Save changes</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal" on:click={() => deleteTimeSlot(curDay, curIndex)}>Delete</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" on:click={() => setTimeSlot(curDay, curIndex, curName, curPeriod, curStyle)}>Save changes</button>
         </div>
       </div>
     </div>
